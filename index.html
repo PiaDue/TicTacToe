@@ -1,0 +1,252 @@
+<!-- TOKEN: c1c1b1b27c3257ecafcf82f8edc2b47132a046c42c79854726360a976ee3c442 -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Ex9 Tic Tac Toe</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-left: 40px;
+        }
+
+        td {
+            border: 3px solid hsl(0, 0%, 40%);
+            width: 100px;
+            height: 100px;
+            z-index: 0;
+        }
+
+        td img {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            z-index: 10;
+            width: 100%;
+        }
+
+        tr {
+            width: 300px;
+            height: 100px;
+            border: 1px solid black;
+        }
+
+        table {
+            width: 300px;
+            border: 3px hidden black;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        button {
+            height: 30px;
+            width: 60px;
+            background-color: rgba(255, 0, 0, 0.488);
+            border-radius: 20px;
+            border: 0px solid;
+        }
+
+        button:hover {
+            background-color: rgba(255, 0, 0, 0.605);
+        }
+
+        h1 {
+            font-size: 40px;
+            color: rgba(255, 0, 0, 0.605);
+        }
+
+        h3,
+        #currentPlayerHTML {
+            color: hsl(0, 0%, 30%);
+            border: 1px hidden black;
+        }
+
+        #currentPlayerHTML img {
+            height: 20px;
+            vertical-align: bottom;
+        }
+
+        h2#finalResultHTML {
+            color: rgba(69, 135, 69, 0.81);
+            font-size: 30px;
+        }
+
+        h2#finalResultHTML img {
+            height: 25px;
+            margin: 5px;
+            vertical-align: bottom;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>TicTacToe</h1>
+    <h3>Turn of Player: <span id="currentPlayerHTML"></span></h3>
+    <!-- <h3 id="finalResultHTML"></h3> -->
+    <button id="playButtonHTML">Start</button>
+
+    <table>
+        <tr>
+            <td id="0"></td>
+            <td id="1"></td>
+            <td id="2"></td>
+        </tr>
+        <tr>
+            <td id="3"></td>
+            <td id="4"></td>
+            <td id="5"></td>
+        </tr>
+        <tr>
+            <td id="6"></td>
+            <td id="7"></td>
+            <td id="8"></td>
+        </tr>
+
+    </table>
+    <h2 id="finalResultHTML"></h2>
+
+    <script>
+
+        const playButtonHTML = document.querySelector('#playButtonHTML');
+        const finalResultHTML = document.querySelector('#finalResultHTML');
+        const currentPlayerHTML = document.querySelector('#currentPlayerHTML');
+        var board = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+        var winner = 0; // 1||2||4(Tie)
+        var currentPlayer = 1; // 1||2
+
+        const winningConditions = [
+            //combinations of winning boad-indexes
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+
+        playButtonHTML.addEventListener('click', startGame);
+        function startGame() {
+            resetBoard();//clears board visually
+            console.log('game started');
+
+            board = [0, 0, 0, 0, 0, 0, 0, 0, 0]; //clears board logically
+            winner = 0;
+            currentPlayer = 1;
+            if (currentPlayer === 1) {
+                currentPlayerHTML.innerHTML = '<img src="img/o.png" alt="">';
+            } else {
+                currentPlayerHTML.innerHTML = '<img src="img/x.png" alt="">';
+            }
+
+            for (let i = 0; i <= 8; i++) {
+                let element = document.getElementById(i);
+                //element.removeEventListener('click', move);
+                element.addEventListener('click', move);
+            }
+
+        }
+
+        function move() {
+            let index = this.id;
+            console.log('clicked Board index: ' + index);
+            //check if move is valid
+            if (board[index] === 0) {
+                //change board entry
+                board[index] = currentPlayer;
+                if (currentPlayer === 1) {
+                    document.getElementById(index).innerHTML = '<img src="img/o.png" alt="">';
+                } else {
+                    document.getElementById(index).innerHTML = '<img src="img/x.png" alt="">';
+                }
+
+                evaluate();
+                if (winner === 0) {
+                    changePlayer();
+                }
+            }
+        }
+
+        function evaluate() {
+            for (let i = 0; i <= 7; i++) {
+                const winningCondition = winningConditions[i];
+
+                //checks if all three fields are filled
+                if (board[winningCondition[0]] === 0 ||
+                    board[winningCondition[1]] === 0 ||
+                    board[winningCondition[2]] === 0) {
+                    //Game continues
+                    console.log('game continues -> no result');
+                    continue;
+                }
+                //checks if any winning condition is fullfilled
+                if (board[winningCondition[0]] === board[winningCondition[1]] &&
+                    board[winningCondition[1]] === board[winningCondition[2]]) {
+                    //Game is won
+                    console.log('winner found');
+                    winner = currentPlayer;
+                    setWinner(winner);
+                    break;
+                }
+                //all fields are filled and no winning condition is fullfilled
+                else if (!board.includes(0) && i === 7) {
+                    //Game ends:  tie
+                    console.log('tie');
+                    winner = 4;
+                    setWinner(winner);
+                    break;
+                }
+            }
+
+        }
+
+        function changePlayer() {
+            console.log('change player method arrived ' + currentPlayer);
+            if (currentPlayer === 1) {
+                currentPlayer = 2;
+            }
+            else {
+                currentPlayer = 1;
+            }
+            if (currentPlayer === 1) {
+                currentPlayerHTML.innerHTML = '<img src="img/o.png" alt="">';
+            } else {
+                currentPlayerHTML.innerHTML = '<img src="img/x.png" alt="">';
+            }
+        }
+
+        function setWinner(winner) {
+            announceWinner(winner);
+            for (let i = 0; i <= 8; i++) {
+                document.getElementById(i).removeEventListener('click', move);
+            }
+        }
+
+        function announceWinner(winner) {
+            //announces the final result/winner
+            if (winner == 1) {
+                finalResultHTML.innerHTML = 'Player' + '<img src="img/o.png" alt="">' + 'won!';
+            }
+            else if (winner == 2) {
+                finalResultHTML.textContent = 'Player' + '<img src="img/o.png" alt="">' + 'won!';
+            }
+            else if (winner == 4) {
+                finalResultHTML.textContent = 'Tie!';
+            }
+        }
+
+        function resetBoard() {
+            for (let index = 0; index <= 8; index++) {
+                document.getElementById(index).innerHTML = '';
+            }
+            finalResultHTML.textContent = '';
+        }
+
+    </script>
+</body>
+
+</html>
