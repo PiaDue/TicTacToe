@@ -1,4 +1,5 @@
 <!-- TOKEN: c1c1b1b27c3257ecafcf82f8edc2b47132a046c42c79854726360a976ee3c442 -->
+<!-- TOKEN: c1c1b1b27c3257ecafcf82f8edc2b47132a046c42c79854726360a976ee3c442 -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +25,7 @@
             margin-left: auto;
             margin-right: auto;
             z-index: 10;
-            width: 100%;
+            width: 90%;
         }
 
         tr {
@@ -60,7 +61,6 @@
         h3,
         #currentPlayerHTML {
             color: hsl(0, 0%, 30%);
-            border: 1px hidden black;
         }
 
         #currentPlayerHTML img {
@@ -85,7 +85,6 @@
 
     <h1>TicTacToe</h1>
     <h3>Turn of Player: <span id="currentPlayerHTML"></span></h3>
-    <!-- <h3 id="finalResultHTML"></h3> -->
     <button id="playButtonHTML">Start</button>
 
     <table>
@@ -118,7 +117,7 @@
         var currentPlayer = 1; // 1||2
 
         const winningConditions = [
-            //combinations of winning boad-indexes
+            //combinations of winning board-indexes
             [0, 1, 2],
             [3, 4, 5],
             [6, 7, 8],
@@ -145,7 +144,6 @@
 
             for (let i = 0; i <= 8; i++) {
                 let element = document.getElementById(i);
-                //element.removeEventListener('click', move);
                 element.addEventListener('click', move);
             }
 
@@ -232,7 +230,7 @@
                 finalResultHTML.innerHTML = 'Player' + '<img src="img/o.png" alt="">' + 'won!';
             }
             else if (winner == 2) {
-                finalResultHTML.textContent = 'Player' + '<img src="img/o.png" alt="">' + 'won!';
+                finalResultHTML.innerHTML = 'Player' + '<img src="img/x.png" alt="">' + 'won!';
             }
             else if (winner == 4) {
                 finalResultHTML.textContent = 'Tie!';
